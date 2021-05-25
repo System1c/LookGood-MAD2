@@ -41,7 +41,6 @@ class AuthService {
 
   resetPassW(String email) {
     return FirebaseAuth.instance.sendPasswordResetEmail(email: email);
-    print("asd");
   }
 
   String getUid() {

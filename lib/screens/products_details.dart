@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:lookgood_cb007942/screens/checkout.dart';
+import 'package:share/share.dart';
 
 import 'package:lookgood_cb007942/screens/widgets/home_bar.dart';
 import 'package:lookgood_cb007942/screens/widgets/prodsize.dart';
@@ -75,17 +77,25 @@ class _prodpageState extends State<prodpage> {
                     padding: const EdgeInsets.all(24.0),
                     child: Row(
                       children: [
-                        Container(
-                          width: 65.0,
-                          height: 65.0,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).accentColor,
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          alignment: Alignment.center,
-                          child: Image(
-                            image: AssetImage("assets/icons/buy.png"),
-                            height: 22.0,
+                        GestureDetector(
+                          onTap: () async {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => chckout()));
+                          },
+                          child: Container(
+                            width: 65.0,
+                            height: 65.0,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).accentColor,
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            alignment: Alignment.center,
+                            child: Image(
+                              image: AssetImage("assets/icons/buy.png"),
+                              height: 22.0,
+                            ),
                           ),
                         ),
                         Expanded(
@@ -143,14 +153,36 @@ class _prodpageState extends State<prodpage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 24.0),
-                    child: Text("\$${documentd['price']} " ?? "Price",
-                        style: TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.w600,
-                            color: Theme.of(context).accentColor)),
-                  ),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 24.0),
+                      child: Row(
+                        children: [
+                          Text("\$${documentd['price']} " ?? "Price",
+                              style: TextStyle(
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.w600,
+                                  color: Theme.of(context).accentColor)),
+                          GestureDetector(
+                            onTap: () {
+                              Share.share(
+                                  'Check this out on LookGood! https://www.lookgood.com/product/${widget.productID}');
+                            },
+                            child: Container(
+                              width: 30.0,
+                              height: 30.0,
+                              decoration: BoxDecoration(
+                                color: Colors.blue,
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                              alignment: Alignment.center,
+                              child: Image(
+                                image: AssetImage("assets/icons/share.png"),
+                                height: 22.0,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 8.0, horizontal: 24.0),

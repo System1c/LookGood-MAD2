@@ -8,12 +8,13 @@ class ContactS extends StatelessWidget {
       child: Stack(
         children: [
           Center(
-            child: Text("Home Tab"),
+            child: Text("Contact Us"),
           ),
           homeActBar(
             tit: "Contact Us",
             titH: true,
             bckar: false,
+            crt: false,
           ),
         ],
       ),

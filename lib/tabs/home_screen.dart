@@ -43,7 +43,14 @@ class HomeS extends StatelessWidget {
                       },
                       child: Container(
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12.0)),
+                              borderRadius: BorderRadius.circular(12.0),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey,
+                                  spreadRadius: 1.0,
+                                  blurRadius: 30.0,
+                                )
+                              ]),
                           height: 350.0,
                           margin: EdgeInsets.symmetric(
                             vertical: 12.0,
@@ -96,7 +103,7 @@ class HomeS extends StatelessWidget {
             },
           ),
           homeActBar(
-            tit: "Home",
+            tit: "Home // Categories",
             titH: true,
             bckar: false,
           ),

@@ -150,6 +150,8 @@ class _cartState extends State<cart> {
           homeActBar(
             bckar: true,
             tit: "Cart",
+            btn: true,
+            crt: false,
           )
         ],
       ),
