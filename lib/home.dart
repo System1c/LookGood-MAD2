@@ -5,7 +5,6 @@ import 'tabs/search_screen.dart';
 import 'tabs/account_screen.dart';
 import 'tabs/contact_screen.dart';
 
-
 import 'screens/widgets/top.dart';
 
 class HomePage extends StatefulWidget {
@@ -46,7 +45,7 @@ class _HomePageState extends State<HomePage> {
             HomeS(),
             SearchS(),
             AccS(),
-            ContactS()
+            ContactS(),
           ],
         )),
         top(

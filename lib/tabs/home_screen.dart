@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:lookgood_cb007942/screens/cat_sort.dart';
+import 'package:lookgood_cb007942/screens/products_details.dart';
 import 'package:lookgood_cb007942/screens/widgets/home_bar.dart';
 
 class HomeS extends StatelessWidget {
   final CollectionReference _prodRef =
-      FirebaseFirestore.instance.collection("Products");
+      FirebaseFirestore.instance.collection("Category");
 
   @override
   Widget build(BuildContext context) {
@@ -29,21 +31,59 @@ class HomeS extends StatelessWidget {
                     bottom: 24.0,
                   ),
                   children: snapshot.data.docs.map((document) {
-                    return Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12.0)),
-                        height: 350.0,
-                        margin: EdgeInsets.symmetric(
-                          vertical: 12.0,
-                          horizontal: 24.0,
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(12.0),
-                          child: Image.network(
-                            "${document.data()['images'][0]}",
-                            fit: BoxFit.cover,
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => catsort(
+                                catIda: document.data()['pid'],
+                              ),
+                            ));
+                      },
+                      child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12.0)),
+                          height: 350.0,
+                          margin: EdgeInsets.symmetric(
+                            vertical: 12.0,
+                            horizontal: 24.0,
                           ),
-                        ));
+                          child: Stack(
+                            children: [
+                              Container(
+                                height: 350,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                  child: Image.network(
+                                    "${document.data()['image'][0]}",
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                          document.data()['name'] ?? "Category",
+                                          style: TextStyle(
+                                              fontSize: 18.0,
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.black)),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ],
+                          )),
+                    );
                   }).toList(),
                 );
               }
