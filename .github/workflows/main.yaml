@@ -19,8 +19,7 @@ jobs:
         with:
           flutter-version: '2.2.0'
       - run: flutter pub get
-      # run  flutter widgets tests  and unit tests
-      - run: flutter test --coverage
+
       
 
   drive_ios:
