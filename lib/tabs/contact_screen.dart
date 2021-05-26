@@ -4,8 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:lookgood_cb007942/screens/widgets/home_bar.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-class ContactS extends StatelessWidget {
+class ContactS extends StatefulWidget {
+  @override
+  _ContactSState createState() => _ContactSState();
+}
+
+class _ContactSState extends State<ContactS> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +52,7 @@ class ContactS extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    CustomLaunch('tel: +94112729729');
+                    CustomLaunch("tel: +94112729729");
                   },
                   child: Container(
                     width: 60.0,
@@ -137,9 +143,5 @@ class MapSampleState extends State<MapSample> {
 }
 
 void CustomLaunch(cmd) async {
-  if (await canLaunch(cmd)) {
-    await launch(cmd);
-  } else {
-    print("error in funct");
-  }
+  await canLaunch(cmd) ? await launch(cmd) : throw 'Could not launch $cmd';
 }

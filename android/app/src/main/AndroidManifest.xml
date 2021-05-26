@@ -1,5 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.lookgood_cb007942">
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"/>
+
    <application
         android:label="lookgood_cb007942"
         android:icon="@mipmap/ic_launcher">
