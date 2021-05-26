@@ -72,8 +72,11 @@ class homeActBar extends StatelessWidget {
             if (_crt)
               GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => cart()));
+                  Navigator.of(context).push(PageRouteBuilder(
+                      pageBuilder: (context, animation, _) {
+                        return SecondScreen();
+                      },
+                      opaque: false));
                 },
                 child: Container(
                     width: 42.0,

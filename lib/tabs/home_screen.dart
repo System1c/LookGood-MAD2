@@ -51,7 +51,6 @@ class HomeS extends StatelessWidget {
                                   blurRadius: 30.0,
                                 )
                               ]),
-                          height: 350.0,
                           margin: EdgeInsets.symmetric(
                             vertical: 12.0,
                             horizontal: 24.0,
@@ -59,7 +58,8 @@ class HomeS extends StatelessWidget {
                           child: Stack(
                             children: [
                               Container(
-                                height: 350,
+                                height: 250.0,
+                                width: 400.0,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(12.0),
                                   child: Image.network(
@@ -69,7 +69,7 @@ class HomeS extends StatelessWidget {
                                 ),
                               ),
                               Positioned(
-                                bottom: 0,
+                                bottom: 185.0,
                                 left: 0,
                                 right: 0,
                                 child: Padding(
