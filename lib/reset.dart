@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lookgood_cb007942/services/authservice.dart';
-import 'package:lookgood_cb007942/services/errorHand.dart';
 
 class resetPass extends StatefulWidget {
   @override

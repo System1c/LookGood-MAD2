@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'tabs/home_screen.dart';
 import 'tabs/search_screen.dart';
 import 'tabs/account_screen.dart';
