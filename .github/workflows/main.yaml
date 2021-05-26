@@ -1,86 +1,139 @@
-name: LookGood Stable Build
-
-on:
-  push:
-    branches: [ master ]
-
+#The name of your workflow.
+name:  Dear God Work
+# Trigger the workflow on push or pull request
+on: [push,pull_request]
+#A workflow run is made up of one or more jobs. Jobs run in parallel by default.
 jobs:
-  version:
-    name: Create version number
+
+  test:
+    #The type of machine to run the job on. [windows,macos, ubuntu , self-hosted]
     runs-on: ubuntu-latest
+    #sequence of tasks called
     steps:
-    - uses: actions/checkout@v1
-    - name: Fetch all history for all tags and branches
-      run: |
-        git config remote.origin.url https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}
-        git fetch --prune --depth=10000
-    - name: Install GitVersion
-      uses: gittools/actions/gitversion/setup@v0.9.9
-      with:
-          versionSpec: '5.x'
-    - name: Use GitVersion
-      id: gitversion
-      uses: gittools/actions/gitversion/execute@v0.9.9
-    - name: Create version.txt with nuGetVersion
-      run: echo ${{ steps.gitversion.outputs.nuGetVersion  }} > version.txt
-    - name: Upload version.txt
-      uses: actions/upload-artifact@v2
-      with:
-        name: gitversion
-        path: version.txt
-  build:
-    name: Build APK and Create release
-    needs: [ version ]
-    runs-on: ubuntu-latest
+      # The branch or tag ref that triggered the workflow will be checked out.
+      # https://github.com/actions/checkout
+      - uses: actions/checkout@v1
+      # Setup a flutter environment.
+      # https://github.com/marketplace/actions/flutter-action
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '1.12.14'
+          channel: 'dev'
+      - run: flutter pub get
+      # run static analys code
+      - run: flutter  analyze
+      # run  flutter widgets tests  and unit tests
+      - run: flutter test --coverage
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: coverage/lcov.info
+
+  drive_ios:
+    #creates a build matrix for your jobs
+    strategy:
+      #set of different configurations of the virtual environment.
+      matrix:
+        device:
+          - "iPhone 8 (13.1)"
+          - "iPhone 11 Pro Max (13.1)"
+      fail-fast: false
+    #if conditional to prevent a job from running
+    if: github.event_name != 'pull_request'
+    runs-on: macos-latest
+    #Identifies any jobs that must complete successfully before this job will run.
+    needs: test
     steps:
-    - uses: actions/checkout@v1
-    - name: Get version.txt
-      uses: actions/download-artifact@v2
-      with:
-        name: gitversion
-    - name: Create new file without newline char from version.txt
-      run: tr -d '\n' < version.txt > version1.txt
-    - name: Read version
-      id: version
-      uses: juliangruber/read-file-action@v1.1.1
-      with:
-        path: version1.txt
-    - name: Update version in YAML
-      run: sed -i 's/99.99.99+99/${{ steps.version.outputs.content }}+${{ github.run_number }}/g' pubspec.yaml
-    - name: Update KeyStore password in gradle properties
-      run: sed -i 's/#{KEYSTORE_PASS}#/${{ secrets.KEYSTORE_PASS }}/g' android/key.properties
-    - name: Update KeyStore key password in gradle properties
-      run: sed -i 's/#{KEYSTORE_KEY_PASS}#/${{ secrets.KEYSTORE_KEY_PASS }}/g' android/key.properties
-    - uses: actions/setup-java@v1
-      with:
-        java-version: '12.x'
-    - uses: subosito/flutter-action@v1.5.0
-      with:
-        flutter-version: '2.2.0'
-    - run: flutter pub get
-    - run: flutter test
-    - run: flutter build apk --release --split-per-abi
-    - run: flutter build appbundle
-    - name: Create a Release in GitHub
-      uses: ncipollo/release-action@v1.8.6
-      with:
-        artifacts: "build/app/outputs/apk/release/*.apk,build/app/outputs/bundle/release/app-release.aab"
-        token: ${{ secrets.GH_TOKEN }}
-        tag: ${{ steps.version.outputs.content }}
-        commit: ${{ github.sha }}
-    - name: Upload app bundle
-      uses: actions/upload-artifact@v2.2.3
-      with:
-        name: appbundle
-        path: build/app/outputs/bundle/release/app-release.aab
-  release:
-    name: Release app to internal track
-    needs: [ build ]
-    runs-on: ubuntu-latest
+      - name: List all simulators
+        run: xcrun instruments -s
+      # get UUID  simulator and boot a simulator on mac from  command line
+      - name: Start Simulator
+        run: |
+          UDID=$(
+            xcrun instruments -s |
+            awk \
+              -F ' *[][]' \
+              -v 'device=${{ matrix.device }}' \
+              '$1 == device { print $2 }'
+          )
+          xcrun simctl boot "${UDID:?No Simulator with this name found}"
+      - uses: actions/checkout@v1
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '1.12.14'
+          channel: 'dev'
+      # Run flutter integrate tests
+      - name: Run Flutter Driver tests
+        run: flutter drive --target=test_driver/app.dart
+
+
+  drive_android:
+    #if conditional to prevent a job from running
+    if: github.event_name != 'pull_request'
+    runs-on: macos-latest
+    #creates a build matrix for your jobs
+    strategy:
+      #set of different configurations of the virtual environment.
+      matrix:
+        api-level: [21, 29]
+        target: [default]
+    needs: test
     steps:
-    - uses: actions/checkout@v1
-    - name: Get appbundle from artifacts
-      uses: actions/download-artifact@v2.0.9
-      with:
-        name: appbundle
-   
+      - uses: actions/checkout@v1
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '1.12.14'
+          channel: 'dev'
+      - name: Run Flutter Driver tests
+        #GitHub Action for installing, configuring and running Android Emulators (work only Mac OS)
+        #https://github.com/ReactiveCircus/android-emulator-runner
+        uses: reactivecircus/android-emulator-runner@v1
+        with:
+          api-level: ${{ matrix.api-level }}
+          target: ${{ matrix.target }}
+          arch: x86_64
+          profile: Nexus 6
+          script: flutter drive --target=test_driver/app.dart
+
+  build_deploy:
+    #if conditional to prevent a job from running
+    if: github.event_name != 'pull_request'
+    runs-on: macos-latest
+    #Identifies any jobs that must complete successfully before this job will run.
+    needs: [drive_ios,drive_android,test]
+    name: Build  apk  and web
+    steps:
+      - uses: actions/checkout@v1
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '1.12.14'
+          channel: 'dev'
+      # This action sets up a java environment
+      # https://github.com/actions/setup-java
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+      #enable linux,macos,windows   and  web
+      - run: flutter  config --enable-web
+      - run: flutter  config --enable-linux-desktop
+      - run: flutter  config --enable-macos-desktop
+      - run: flutter  config --enable-windows-desktop
+      #- run: flutter build macos --debug
+      - run: flutter build apk --debug --split-per-abi
+      # This action will create a github release and optionally upload an artifact to it.
+      # https://github.com/ncipollo/release-action
+      - name: Create a Release APK
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "build/app/outputs/apk/debug/*.apk"
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - run: flutter build web
+      # Handle the deploy process of your project to GitHub Pages.
+      # https://github.com/JamesIves/github-pages-deploy-action
+      - uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_ACCESS_TOKEN }}
+          BASE_BRANCH: master
+          BRANCH: gh-pages
+          FOLDER: build/web
