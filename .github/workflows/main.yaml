@@ -67,7 +67,7 @@ jobs:
     strategy:
       #set of different configurations of the virtual environment.
       matrix:
-        api-level: [20, 30]
+        api-level: [21, 30]
         target: [default]
     needs: test
     steps:
