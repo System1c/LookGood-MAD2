@@ -28,7 +28,7 @@ class _SearchSState extends State<SearchS> {
               ),
             )
           else
-            FutureBuilder<QuerySnapshot>(
+            FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
               future: _fireS.prodRef
                   .orderBy("name")
                   .startAt([_srch]).endAt(["$_srch\uf8ff"]).get(),
@@ -41,9 +41,7 @@ class _SearchSState extends State<SearchS> {
                   );
                 }
 
-                // Collection Data ready to display
                 if (snapshot.connectionState == ConnectionState.done) {
-                  // Display the data inside a list view
                   return ListView(
                     padding: EdgeInsets.only(
                       top: 128.0,
@@ -60,7 +58,6 @@ class _SearchSState extends State<SearchS> {
                   );
                 }
 
-                // Loading State
                 return Scaffold(
                   body: Center(
                     child: CircularProgressIndicator(),
@@ -70,7 +67,7 @@ class _SearchSState extends State<SearchS> {
             ),
           Padding(
             padding: const EdgeInsets.only(
-              top: 45.0,
+              top: 60.0,
             ),
             child: Container(
               margin: EdgeInsets.symmetric(

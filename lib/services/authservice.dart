@@ -43,13 +43,25 @@ class AuthService {
     return FirebaseAuth.instance.sendPasswordResetEmail(email: email);
   }
 
+  String getCurrentEm() {
+    return _firebaseAuth.currentUser.email;
+  }
+
+  String getCurrentDet() {
+    return _firebaseAuth.currentUser.displayName;
+  }
+
+  setCurrentDet(name) {
+    return FirebaseAuth.instance.currentUser.updateProfile(displayName: name);
+  }
+
   String getUid() {
     return _firebaseAuth.currentUser.uid;
   }
 
-  final CollectionReference prodRef =
+  final CollectionReference<Map<String, dynamic>> prodRef =
       FirebaseFirestore.instance.collection("Products");
 
-  final CollectionReference users =
+  final CollectionReference<Map<String, dynamic>> users =
       FirebaseFirestore.instance.collection("Users");
 }

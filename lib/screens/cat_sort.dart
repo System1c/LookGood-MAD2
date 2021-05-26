@@ -21,7 +21,7 @@ class _catsortState extends State<catsort> {
     return Scaffold(
       body: Stack(
         children: [
-          FutureBuilder<QuerySnapshot>(
+          FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
             future: _prodRef.get(),
             builder: (context, snapshot) {
               if (snapshot.hasError) {

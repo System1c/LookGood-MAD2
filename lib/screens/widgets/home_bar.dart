@@ -11,9 +11,16 @@ class homeActBar extends StatelessWidget {
   final bool backhave;
   final bool crt;
   final bool btn;
+  final bool logout;
 
   homeActBar(
-      {this.tit, this.bckar, this.titH, this.backhave, this.btn, this.crt});
+      {this.tit,
+      this.bckar,
+      this.titH,
+      this.backhave,
+      this.btn,
+      this.crt,
+      this.logout});
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +29,7 @@ class homeActBar extends StatelessWidget {
     bool _backhave = backhave ?? true;
     bool _btn = btn ?? false;
     bool _crt = crt ?? true;
+    bool _logout = logout ?? false;
 
     final CollectionReference _user =
         FirebaseFirestore.instance.collection("Users");
@@ -103,6 +111,23 @@ class homeActBar extends StatelessWidget {
                   child: Image(
                     image: AssetImage(
                       "assets/icons/check.png",
+                    ),
+                    width: 20.0,
+                    height: 20.0,
+                  ),
+                ),
+              ),
+            if (_logout)
+              GestureDetector(
+                onTap: () async {
+                  await FirebaseAuth.instance.signOut();
+                },
+                child: Container(
+                  width: 42.0,
+                  height: 42.0,
+                  child: Image(
+                    image: AssetImage(
+                      "assets/icons/logout.png",
                     ),
                     width: 20.0,
                     height: 20.0,

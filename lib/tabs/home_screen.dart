@@ -13,7 +13,7 @@ class HomeS extends StatelessWidget {
     return Container(
       child: Stack(
         children: [
-          FutureBuilder<QuerySnapshot>(
+          FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
             future: _prodRef.get(),
             builder: (context, snapshot) {
               if (snapshot.hasError) {

@@ -18,7 +18,11 @@ class _chckoutState extends State<chckout> {
   User _us = FirebaseAuth.instance.currentUser;
 
   Future _del() {
-    return _user.doc(_us.uid).delete();
+    _user.doc(_us.uid).collection("Cart").get().then((snapshot) {
+      for (DocumentSnapshot ds in snapshot.docs) {
+        ds.reference.delete();
+      }
+    });
   }
 
   @override

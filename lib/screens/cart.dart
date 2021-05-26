@@ -17,7 +17,7 @@ class _cartState extends State<cart> {
     return Scaffold(
       body: Stack(
         children: [
-          FutureBuilder<QuerySnapshot>(
+          FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
             future: _fireS.users.doc(_fireS.getUid()).collection("Cart").get(),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
