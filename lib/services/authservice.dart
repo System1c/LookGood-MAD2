@@ -52,7 +52,12 @@ class AuthService {
   }
 
   setCurrentDet(name) {
-    return FirebaseAuth.instance.currentUser.updateProfile(displayName: name);
+    if (FirebaseAuth.instance.currentUser.updateProfile(displayName: name) ==
+        null) {
+      return " ";
+    } else {
+      return FirebaseAuth.instance.currentUser.updateProfile(displayName: name);
+    }
   }
 
   String getUid() {

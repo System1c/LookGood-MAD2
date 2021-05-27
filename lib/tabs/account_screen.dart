@@ -12,6 +12,7 @@ class _AccSState extends State<AccS> {
   final formKey = new GlobalKey<FormState>();
   Color greenColor = Color(0xFF00AF19);
   String email = AuthService().getCurrentEm();
+
   String name = AuthService().getCurrentDet();
   String address;
 
@@ -108,6 +109,7 @@ class _AccSState extends State<AccS> {
               if (snapshot.connectionState == ConnectionState.done) {
                 Map<String, dynamic> data = snapshot.data.data();
                 address = data['size'];
+
                 return TextFormField(
                   initialValue: address,
                   decoration: InputDecoration(

@@ -45,6 +45,21 @@ class _chckoutState extends State<chckout> {
               ),
               textAlign: TextAlign.center,
             ),
+            if (AuthService()
+                    .users
+                    .doc(AuthService().getUid())
+                    .collection("Address")
+                    .doc("Address0")
+                    .get() ==
+                null)
+              Text(
+                "Please enter your Address to prevent delays in your order",
+                style: TextStyle(
+                  fontSize: 15.0,
+                  fontWeight: FontWeight.w600,
+                ),
+                textAlign: TextAlign.center,
+              ),
             GestureDetector(
               onTap: () async {
                 await _del();
@@ -52,19 +67,20 @@ class _chckoutState extends State<chckout> {
                     MaterialPageRoute(builder: (context) => HomePage()));
               },
               child: Container(
-                  margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 15.0),
-                  height: 65.0,
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).accentColor,
-                      borderRadius: BorderRadius.circular(30.0)),
-                  alignment: Alignment.center,
-                  child: Text(
-                    "Go back home",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w600),
-                  )),
+                margin: EdgeInsets.only(left: 20.0, right: 20.0, top: 15.0),
+                height: 65.0,
+                decoration: BoxDecoration(
+                    color: Theme.of(context).accentColor,
+                    borderRadius: BorderRadius.circular(30.0)),
+                alignment: Alignment.center,
+                child: Text(
+                  "Go back home",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w600),
+                ),
+              ),
             ),
           ],
         ),

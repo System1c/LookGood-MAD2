@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:lookgood_cb007942/home.dart';
+import 'package:lookgood_cb007942/main.dart';
 import 'package:lookgood_cb007942/reset.dart';
 import 'package:lookgood_cb007942/services/authservice.dart';
 import 'package:lookgood_cb007942/signup.dart';
@@ -137,6 +139,8 @@ class _LoginPageState extends State<LoginPage> {
           GestureDetector(
             onTap: () {
               if (checkFields()) AuthService().signIn(email, password, context);
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => HomePage()));
             },
             child: Container(
                 height: 50.0,

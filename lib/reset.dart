@@ -105,7 +105,7 @@ class _resetPassState extends State<resetPass> {
                     color: greenColor,
                     elevation: 7.0,
                     child: Center(
-                        child: Text('RESET',
+                        child: Text('RESET PASSWORD',
                             style: TextStyle(
                                 color: Colors.white, fontFamily: 'Trueno'))))),
           ),

@@ -43,8 +43,18 @@ class SecondScreen extends StatelessWidget {
   }
 }
 
+int total = 0;
+
 class _cartState extends State<cart> {
   AuthService _fireS = AuthService();
+
+  Future _del() {
+    _fireS.users.doc(_fireS.getUid()).collection("Cart").get().then((snapshot) {
+      for (DocumentSnapshot ds in snapshot.docs) {
+        ds.reference.delete();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +103,7 @@ class _cartState extends State<cart> {
                               if (productSnap.connectionState ==
                                   ConnectionState.done) {
                                 Map _pmap = productSnap.data.data();
-
+                                total = total + _pmap['price'];
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(
                                     vertical: 16.0,
@@ -164,6 +174,10 @@ class _cartState extends State<cart> {
                                   ),
                                 );
                               }
+                              if (total > 0) {
+                                print(total);
+                                total = 0;
+                              }
 
                               return Container(
                                 child:
@@ -181,6 +195,38 @@ class _cartState extends State<cart> {
               );
             },
           ),
+          Padding(
+              padding: EdgeInsets.only(top: 600.0, bottom: 15.0),
+              child: Container(
+                  height: 50.0,
+                  width: double.infinity,
+                  color: Colors.white,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Text('Total: \$' + total.toString()),
+                      SizedBox(width: 10.0),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              primary: Theme.of(context).accentColor),
+                          onPressed: () async {
+                            await _del();
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => cart()));
+                          },
+                          child: Center(
+                            child: Text(
+                              'Clear Cart',
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ))),
           homeActBar(
             bckar: true,
             tit: "Cart",

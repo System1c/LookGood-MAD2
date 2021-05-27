@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:lookgood_cb007942/login_page.dart';
 import 'package:lookgood_cb007942/screens/cart.dart';
 import 'package:lookgood_cb007942/screens/checkout.dart';
 
@@ -124,6 +125,8 @@ class homeActBar extends StatelessWidget {
               GestureDetector(
                 onTap: () async {
                   await FirebaseAuth.instance.signOut();
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => LoginPage()));
                 },
                 child: Container(
                   width: 42.0,
