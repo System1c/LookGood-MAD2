@@ -14,6 +14,7 @@ class AuthService {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (BuildContext context, snapshot) {
           if (snapshot.hasData) {
+            setAddr();
             return HomePage();
           } else
             return LoginPage();
@@ -59,6 +60,17 @@ class AuthService {
       return " ";
     } else {
       return FirebaseAuth.instance.currentUser.updateProfile(displayName: name);
+    }
+  }
+
+  setAddr() {
+    if (getCurrentDet() == null) {
+      AuthService()
+          .users
+          .doc(AuthService().getUid())
+          .collection("Address")
+          .doc("Address0")
+          .set({"size": " "});
     }
   }
 

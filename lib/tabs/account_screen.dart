@@ -106,10 +106,11 @@ class _AccSState extends State<AccS> {
                 .get(),
             builder: (BuildContext context,
                 AsyncSnapshot<DocumentSnapshot> snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasError) {
+                address = " ";
+              } else if (snapshot.connectionState == ConnectionState.done) {
                 Map<String, dynamic> data = snapshot.data.data();
                 address = data['size'];
-
                 return TextFormField(
                   initialValue: address,
                   decoration: InputDecoration(

@@ -11,6 +11,7 @@ class _SignUpPState extends State<SignUpP> {
   final formKey = new GlobalKey<FormState>();
 
   String email, password;
+  String address = " ";
 
   Color greenColor = Color(0xFF00AF19);
 
@@ -21,6 +22,15 @@ class _SignUpPState extends State<SignUpP> {
       return true;
     }
     return false;
+  }
+
+  Future _addrreg() {
+    return AuthService()
+        .users
+        .doc(AuthService().getUid())
+        .collection("Address")
+        .doc("Address0")
+        .set({"size": address});
   }
 
   String validateEmail(String value) {

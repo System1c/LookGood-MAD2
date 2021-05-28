@@ -5,6 +5,7 @@ class top extends StatefulWidget {
   final Function(int) tabC;
 
   top({this.seletab, this.tabC});
+
   @override
   _topState createState() => _topState();
 }
@@ -15,6 +16,7 @@ class _topState extends State<top> {
 
   Widget build(BuildContext context) {
     _selTab = widget.seletab ?? 0;
+
     return Container(
       decoration: BoxDecoration(
           color: Colors.white,
