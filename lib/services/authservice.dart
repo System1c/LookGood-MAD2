@@ -28,6 +28,8 @@ class AuthService {
     FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password)
         .then((val) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => HomePage()));
       print('Signed in');
     }).catchError((e) {
       ErrorHand().errorDialog(context, e);

@@ -85,7 +85,6 @@ class _LoginPageState extends State<LoginPage> {
               ],
             ),
           ),
-          SizedBox(height: 25.0),
           TextFormField(
             decoration: InputDecoration(
                 labelText: 'EMAIL',
@@ -139,8 +138,6 @@ class _LoginPageState extends State<LoginPage> {
           GestureDetector(
             onTap: () {
               if (checkFields()) AuthService().signIn(email, password, context);
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => HomePage()));
             },
             child: Container(
                 height: 50.0,
