@@ -18,11 +18,14 @@ class _catsortState extends State<catsort> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.catIda);
     return Scaffold(
       body: Stack(
         children: [
           FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
-            future: _prodRef.get(),
+            future: _prodRef
+                .orderBy("pid")
+                .startAt([widget.catIda]).endAt([widget.catIda]).get(),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
                 return Scaffold(
@@ -38,75 +41,75 @@ class _catsortState extends State<catsort> {
                     bottom: 24.0,
                   ),
                   children: snapshot.data.docs.map((document) {
-                    if (widget.catIda == document.data()['pid'])
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => prodpage(
-                                        productID: document.id,
-                                      )));
-                        },
-                        child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12.0),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey,
-                                    spreadRadius: 1.0,
-                                    blurRadius: 30.0,
-                                  )
-                                ]),
-                            height: 350.0,
-                            margin: EdgeInsets.symmetric(
-                              vertical: 12.0,
-                              horizontal: 24.0,
-                            ),
-                            child: Stack(
-                              children: [
-                                Container(
-                                  height: 350,
-                                  width: 650,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(12.0),
-                                    child: Image.network(
-                                      "${document.data()['images'][0]}",
-                                      fit: BoxFit.cover,
-                                    ),
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => prodpage(
+                                      productID: document.id,
+                                    )));
+                      },
+                      child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12.0),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey,
+                                  spreadRadius: 1.0,
+                                  blurRadius: 30.0,
+                                )
+                              ]),
+                          height: 350.0,
+                          margin: EdgeInsets.symmetric(
+                            vertical: 12.0,
+                            horizontal: 24.0,
+                          ),
+                          child: Stack(
+                            children: [
+                              Container(
+                                height: 350,
+                                width: 650,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(12.0),
+                                  child: Image.network(
+                                    "${document.data()['images'][0]}",
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
-                                Positioned(
-                                  bottom: 0,
-                                  left: 0,
-                                  right: 0,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(20.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                            document.data()['name'] ??
-                                                "Product Name",
-                                            style: TextStyle(
-                                                fontSize: 18.0,
-                                                fontWeight: FontWeight.w600,
-                                                color: Colors.black)),
-                                        Text(
-                                            "\$${document.data()['price']}" ??
-                                                "Price",
-                                            style: TextStyle(
-                                                fontSize: 20.0,
-                                                color: Theme.of(context)
-                                                    .accentColor)),
-                                      ],
-                                    ),
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                          document.data()['name'] ??
+                                              "Product Name",
+                                          style: TextStyle(
+                                              backgroundColor: Colors.white,
+                                              fontSize: 18.0,
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.black)),
+                                      Text(
+                                          "\$${document.data()['price']}" ??
+                                              "Price",
+                                          style: TextStyle(
+                                              fontSize: 20.0,
+                                              color: Theme.of(context)
+                                                  .accentColor)),
+                                    ],
                                   ),
-                                )
-                              ],
-                            )),
-                      );
+                                ),
+                              )
+                            ],
+                          )),
+                    );
                   }).toList(),
                 );
               }

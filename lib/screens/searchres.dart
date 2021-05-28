@@ -60,6 +60,7 @@ class searchres extends StatelessWidget {
                     children: [
                       Text(tit ?? "Product Name",
                           style: TextStyle(
+                              backgroundColor: Colors.white,
                               fontSize: 18.0,
                               fontWeight: FontWeight.w600,
                               color: Colors.black)),
